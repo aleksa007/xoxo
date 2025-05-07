@@ -1,0 +1,84 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #fff;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff;
+}
+
+.status {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 8px #ff00cc, 0 0 12px #00f0ff;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+  background: #2a003f;
+  border-radius: 24px;
+  box-shadow: 0 0 40px 10px #1a0030, 0 0 80px 10px #ff00cc44;
+  padding: 16px;
+}
+
+.square {
+  width: 90px;
+  height: 90px;
+  background: #1a0030;
+  border: none;
+  border-radius: 18px;
+  font-size: 3rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px 4px #ff00cc33, 0 0 32px 8px #00f0ff22;
+  transition: background 0.2s, box-shadow 0.2s;
+  color: #fff;
+  outline: none;
+  position: relative;
+}
+
+.square:hover {
+  background: #2a003f;
+  box-shadow: 0 0 24px 8px #ff00cc66, 0 0 48px 12px #00f0ff44;
+}
+
+.square .neon-x {
+  color: #00f0ff;
+  text-shadow: 0 0 12px #00f0ff, 0 0 32px #00f0ff, 0 0 48px #00f0ff;
+}
+
+.square .neon-o {
+  color: #ff00cc;
+  text-shadow: 0 0 12px #ff00cc, 0 0 32px #ff00cc, 0 0 48px #ff00cc;
+}
+
+.reset-button {
+  padding: 10px 24px;
+  font-size: 1rem;
+  background: linear-gradient(90deg, #ff00cc 0%, #00f0ff 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 16px 4px #ff00cc66, 0 0 24px 8px #00f0ff44;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.reset-button:hover {
+  background: linear-gradient(90deg, #00f0ff 0%, #ff00cc 100%);
+  box-shadow: 0 0 32px 8px #ff00cc99, 0 0 48px 12px #00f0ff77;
+} 
