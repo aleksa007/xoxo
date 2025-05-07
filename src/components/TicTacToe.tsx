@@ -46,7 +46,7 @@ const TicTacToe = () => {
     const gameRef = ref(db, `rooms/${roomId}`);
     const unsub = onValue(gameRef, (snapshot) => {
       const data = snapshot.val();
-      if (data && Array.isArray(data.board)) {
+      if (data && Array.isArray(data.board) && data.board.length === 9) {
         setGame(data);
         setWaiting(false);
       } else {
@@ -93,6 +93,7 @@ const TicTacToe = () => {
   // Handle move
   const handleClick = async (index: number) => {
     if (!roomId || !player) return;
+    if (!Array.isArray(game.board) || game.board.length !== 9) return;
     if (game.board[index] || game.winner) return;
     if ((game.isXNext && player !== 'X') || (!game.isXNext && player !== 'O')) return;
     const newBoard = [...game.board];
