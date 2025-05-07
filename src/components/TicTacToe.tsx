@@ -71,7 +71,6 @@ const TicTacToe = () => {
     await set(ref(db, `rooms/${newRoom}`), defaultState);
     setRoomId(newRoom);
     setPlayer('X');
-    setWaiting(true);
   };
 
   // Join an existing room
