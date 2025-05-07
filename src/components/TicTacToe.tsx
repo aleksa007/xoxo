@@ -46,9 +46,11 @@ const TicTacToe = () => {
     const gameRef = ref(db, `rooms/${roomId}`);
     const unsub = onValue(gameRef, (snapshot) => {
       const data = snapshot.val();
-      if (data) {
+      if (data && Array.isArray(data.board)) {
         setGame(data);
         setWaiting(false);
+      } else {
+        setGame(defaultState);
       }
     });
     return () => unsub();
@@ -144,17 +146,18 @@ const TicTacToe = () => {
       <div className="status">Room: <b>{roomId}</b> | You are: <b>{player}</b></div>
       <div className="status">{waiting ? 'Waiting for opponent...' : status}</div>
       <div className="board">
-        {game.board.map((square, index) => (
-          <button
-            key={index}
-            className="square"
-            onClick={() => handleClick(index)}
-            disabled={waiting || !!game.winner || (game.isXNext !== (player === 'X'))}
-          >
-            {square === 'X' && <span className="neon-x">X</span>}
-            {square === 'O' && <span className="neon-o">O</span>}
-          </button>
-        ))}
+        {Array.isArray(game.board) &&
+          game.board.map((square, index) => (
+            <button
+              key={index}
+              className="square"
+              onClick={() => handleClick(index)}
+              disabled={waiting || !!game.winner || (game.isXNext !== (player === 'X'))}
+            >
+              {square === 'X' && <span className="neon-x">X</span>}
+              {square === 'O' && <span className="neon-o">O</span>}
+            </button>
+          ))}
       </div>
       <button className="reset-button" onClick={resetGame} style={{marginRight: 8}}>Reset Game</button>
       <button className="reset-button" onClick={leaveRoom}>Leave Room</button>
