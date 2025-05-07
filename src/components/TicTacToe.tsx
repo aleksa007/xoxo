@@ -122,6 +122,8 @@ const TicTacToe = () => {
     setWaiting(false);
   };
 
+  console.log('waiting:', waiting, 'player:', player, 'isXNext:', game.isXNext);
+
   if (!roomId) {
     return (
       <div className="game">
@@ -152,7 +154,7 @@ const TicTacToe = () => {
               key={index}
               className="square"
               onClick={() => handleClick(index)}
-              disabled={waiting || !!game.winner || (game.isXNext !== (player === 'X'))}
+              disabled={!!game.winner || (game.isXNext !== (player === 'X'))}
             >
               {square === 'X' && <span className="neon-x">X</span>}
               {square === 'O' && <span className="neon-o">O</span>}
