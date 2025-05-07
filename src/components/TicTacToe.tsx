@@ -68,7 +68,11 @@ const TicTacToe = () => {
   // Create a new room
   const createRoom = async () => {
     const newRoom = Math.random().toString(36).substring(2, 8);
-    await set(ref(db, `rooms/${newRoom}`), defaultState);
+    await set(ref(db, `rooms/${newRoom}`), {
+      board: Array(9).fill(null),
+      isXNext: true,
+      winner: null,
+    });
     setRoomId(newRoom);
     setPlayer('X');
   };
