@@ -12,7 +12,7 @@ type GameState = {
 };
 
 const defaultState: GameState = {
-  board: Array(9).fill(null),
+  board: Array(9).fill(''),
   isXNext: true,
   winner: null,
 };
@@ -69,7 +69,7 @@ const TicTacToe = () => {
   const createRoom = async () => {
     const newRoom = Math.random().toString(36).substring(2, 8);
     await set(ref(db, `rooms/${newRoom}`), {
-      board: Array(9).fill(null),
+      board: Array(9).fill(''),
       isXNext: true,
       winner: null,
     });
@@ -109,7 +109,11 @@ const TicTacToe = () => {
   // Reset game
   const resetGame = async () => {
     if (!roomId) return;
-    await set(ref(db, `rooms/${roomId}`), defaultState);
+    await set(ref(db, `rooms/${roomId}`), {
+      board: Array(9).fill(''),
+      isXNext: true,
+      winner: null,
+    });
   };
 
   // Leave room (cleanup)
