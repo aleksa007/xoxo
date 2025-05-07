@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './TicTacToe.css';
 import { db } from '../firebase';
 import { ref, set, onValue, get, remove } from 'firebase/database';
+import chaChaSkunkImg from '../assets/cha-cha-skunk.jpg';
 
 type Player = 'X' | 'O' | null;
 
@@ -135,7 +136,19 @@ const TicTacToe = () => {
   if (!roomId) {
     return (
       <div className="game">
-        <h1>Tic Tac Toe</h1>
+        <h1>Cha Cha Skunk</h1>
+        <img
+          src={chaChaSkunkImg}
+          alt="Cha Cha Skunk"
+          style={{
+            width: '120px',
+            height: '120px',
+            objectFit: 'cover',
+            borderRadius: '50%',
+            marginBottom: '16px',
+            boxShadow: '0 0 24px #00f0ff88'
+          }}
+        />
         <button className="reset-button" onClick={createRoom}>Create Room</button>
         <div style={{ margin: '16px 0' }}>or</div>
         <input
@@ -152,7 +165,19 @@ const TicTacToe = () => {
 
   return (
     <div className="game">
-      <h1>Tic Tac Toe</h1>
+      <h1>Cha Cha Skunk</h1>
+      <img
+        src={chaChaSkunkImg}
+        alt="Cha Cha Skunk"
+        style={{
+          width: '120px',
+          height: '120px',
+          objectFit: 'cover',
+          borderRadius: '50%',
+          marginBottom: '16px',
+          boxShadow: '0 0 24px #00f0ff88'
+        }}
+      />
       <div className="status">Room: <b>{roomId}</b> | You are: <b>{player}</b></div>
       <div className="status">{waiting ? 'Waiting for opponent...' : status}</div>
       <div className="board">
