@@ -1,0 +1,4 @@
+node_modules
+out/*
+!out/frozen-town.mp4
+.remotion
