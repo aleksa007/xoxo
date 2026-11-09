@@ -371,7 +371,7 @@ export const ShotHoist: React.FC<{ start: number }> = ({ start }) => {
       overlay={
         <>
           <Sfx at={71.75 - start} text="CRASH!" x={0.62} y={0.34} color="#ff5a5a" size={110} />
-          <FailStamp at={72.05 - start} y={0.22} />
+          <FailStamp at={72.05 - start} out={73.5 - start} y={0.22} />
           <Tag at={76.15 - start} text="On purpose ✓" color="#4ade80" />
         </>
       }

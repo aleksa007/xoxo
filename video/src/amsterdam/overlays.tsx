@@ -10,8 +10,9 @@ const useLocalSec = () => {
 };
 
 /** Big red rubber-stamp that slams onto the screen. */
-export const FailStamp: React.FC<{ at: number; text?: string; y?: number; color?: string; rotate?: number }> = ({
+export const FailStamp: React.FC<{ at: number; out?: number; text?: string; y?: number; color?: string; rotate?: number }> = ({
   at,
+  out,
   text = "FAIL",
   y = 0.3,
   color = "#e63946",
@@ -20,6 +21,7 @@ export const FailStamp: React.FC<{ at: number; text?: string; y?: number; color?
   const { f, fps } = useLocalSec();
   const start = Math.round(at * fps);
   if (f < start) return null;
+  if (out !== undefined && f >= Math.round(out * fps)) return null;
   const p = spring({ frame: f - start, fps, config: { damping: 9, stiffness: 320, mass: 0.6 } });
   const scale = interpolate(p, [0, 1], [2.6, 1]);
   const op = interpolate(f - start, [0, 3], [0, 1], { extrapolateRight: "clamp" });
