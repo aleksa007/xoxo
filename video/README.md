@@ -60,3 +60,47 @@ Each shot lives in `src/scenes/S*.tsx`. Caption timing is a list of
 `{ at: <frame within the shot>, text }` chunks. Shot lengths are the
 exported `S*_LEN` constants, and `src/FrozenTown.tsx` sequences them and
 places the SFX.
+
+---
+
+# "How to build a house in Amsterdam" (95 s)
+
+Vertical 1080×1920 explainer built around the ElevenLabs voice-over in
+`public/amsterdam/voice.mp3`. Composition id: **`Amsterdam`**.
+
+```bash
+npx remotion render Amsterdam out/amsterdam.mp4 --gl=swangle --concurrency=4
+```
+
+## How it's put together
+
+| Piece | File |
+| --- | --- |
+| Shot list (cut on the voice-over, in seconds) + sound cues | `src/amsterdam/Amsterdam.tsx` |
+| Shots 1–9 (swamp → pile foundation) | `src/amsterdam/shots1.tsx` |
+| Shots 10–19 (upside-down forest → finale) | `src/amsterdam/shots2.tsx` |
+| Models: canal houses (step/bell/neck gables, lean, cracks, smashed windows), piles, pile-driver rig, sofa, Royal Palace, cut-away ground with layers + canal, fire, debris | `src/amsterdam/models.tsx` |
+| Looks, skies, shot shell (punch-in, tilt-shift, grade), camera shake | `src/amsterdam/kit.tsx` |
+| Overlays: FAIL stamp, name card, depth gauge, counters, comic SFX words | `src/amsterdam/overlays.tsx` |
+| Word timings + caption chunks (generated) | `src/amsterdam/timing.ts` |
+
+The toon shader (`src/three/cel.tsx`) now also does procedural brick / wood /
+soil / cobble / roof-tile patterns, rim light, instancing, and "groundwater"
+blue dots on cut faces below a given water level.
+
+## Re-timing to a new voice-over
+
+1. Put the new MP3 in `public/amsterdam/voice.mp3` and the exact text in
+   `scripts/amsterdam-script.txt`.
+2. Force-align it (pocketsphinx, works offline):
+   ```bash
+   python3 -m venv .venv && .venv/bin/pip install pocketsphinx
+   ffmpeg -i public/amsterdam/voice.mp3 -ar 16000 -ac 1 -f s16le /tmp/voice.raw
+   .venv/bin/python scripts/align.py /tmp/voice.raw scripts/amsterdam-script.txt /tmp/words.json
+   ffmpeg -i public/amsterdam/voice.mp3 -af silencedetect=noise=-35dB:d=0.08 -f null - 2>&1 | grep -o "silence_[se][a-z]*: [0-9.]*" > /tmp/silences.txt
+   python3 scripts/make-captions.py /tmp/words.json /tmp/silences.txt scripts/amsterdam-script.txt src/amsterdam/timing.ts
+   ```
+3. Run `scripts/make-captions.py` to regenerate `src/amsterdam/timing.ts`, then
+   adjust the shot start times in `Amsterdam.tsx` and the per-shot cue times.
+
+Music and SFX are synthesized: `node scripts/make-amsterdam-audio.mjs`.
