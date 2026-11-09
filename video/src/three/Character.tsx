@@ -32,6 +32,13 @@ export type CharacterProps = {
   /** Hide the beanie and show hair instead. */
   hair?: string;
   goggles?: boolean;
+  /** Headwear. Defaults to the Arctic beanie (or hair when `hair` is set). */
+  hatStyle?: "beanie" | "brim" | "none";
+  collar?: boolean;
+  cheeks?: boolean;
+  /** Arm rotations [x, z] at the shoulder; overrides the default pose. */
+  armL?: [number, number];
+  armR?: [number, number];
 };
 
 const HEAD_Y = 1.52;
@@ -68,6 +75,15 @@ const Beanie: React.FC<{ color: string }> = ({ color }) => {
   );
 };
 
+/** 17th-century wide-brimmed hat. */
+const BrimHat: React.FC<{ color: string }> = ({ color }) => (
+  <group position={[0, HEAD_Y + 0.33, 0]} rotation={[-0.08, 0, 0.05]}>
+    <Cyl rt={0.66} rb={0.66} h={0.05} color={color} outline={0.025} />
+    <Cyl rt={0.3} rb={0.36} h={0.4} position={[0, 0.22, 0]} color={color} outline={0.025} />
+    <Cyl rt={0.365} rb={0.365} h={0.07} position={[0, 0.06, 0]} color="#c9a227" outline={0.012} />
+  </group>
+);
+
 const Hair: React.FC<{ color: string }> = ({ color }) => {
   const cap = useMemo(() => new THREE.SphereGeometry(HEAD_R * 1.03, 28, 18, 0, Math.PI * 2, 0, Math.PI * 0.36), []);
   return (
@@ -94,6 +110,11 @@ export const Character: React.FC<CharacterProps> = ({
   seed = 0,
   hair,
   goggles = false,
+  hatStyle,
+  collar = false,
+  cheeks = true,
+  armL,
+  armR,
 }) => {
   const frame = useCurrentFrame() + seed * 17;
   const bob = Math.sin(frame / 9) * 0.015;
@@ -103,6 +124,7 @@ export const Character: React.FC<CharacterProps> = ({
   const rightArm = wave ? 2.55 + Math.sin(frame / 3.2) * 0.4 : 0.22;
   const talkOpen = mouth === "talk" ? (Math.sin(frame / 2.2) > 0 ? 1 : 0.35) : 1;
 
+  const handColor = hatStyle === "brim" || hatStyle === "none" ? skin : hat;
   const browRot = { neutral: 0, worried: 0.32, angry: -0.38, raised: 0.12 }[brows];
   const browLift = brows === "raised" ? 0.05 : 0;
 
@@ -126,13 +148,14 @@ export const Character: React.FC<CharacterProps> = ({
       </group>
 
       {/* arms (pivot at the shoulder) */}
-      <group position={[-0.3, 1.0 + bob, 0]} rotation={[0, 0, -0.22]}>
+      {collar ? <Cyl rt={0.3} rb={0.38} h={0.07} position={[0, 1.08 + bob, 0]} color="#f7f5ef" outline={0.02} /> : null}
+      <group position={[-0.3, 1.0 + bob, 0]} rotation={armL ? [armL[0], 0, armL[1]] : [0, 0, -0.22]}>
         <Capsule r={0.068} len={0.36} position={[0, -0.24, 0]} color={coat} outline={0.025} />
-        <Ball r={0.095} position={[0, -0.5, 0]} color={hat} outline={0.025} />
+        <Ball r={0.095} position={[0, -0.5, 0]} color={handColor} outline={0.025} />
       </group>
-      <group position={[0.3, 1.0 + bob, 0]} rotation={[0, 0, rightArm]}>
+      <group position={[0.3, 1.0 + bob, 0]} rotation={armR ? [armR[0], 0, armR[1]] : [0, 0, rightArm]}>
         <Capsule r={0.068} len={0.36} position={[0, -0.24, 0]} color={coat} outline={0.025} />
-        <Ball r={0.095} position={[0, -0.5, 0]} color={hat} outline={0.025} />
+        <Ball r={0.095} position={[0, -0.5, 0]} color={handColor} outline={0.025} />
       </group>
 
       {/* head */}
@@ -140,7 +163,18 @@ export const Character: React.FC<CharacterProps> = ({
         <group position={[0, HEAD_Y, 0]} rotation={[0, look, 0]}>
           <group position={[0, -HEAD_Y, 0]}>
             <Ball r={HEAD_R} position={[0, HEAD_Y, 0]} color={skin} outline={0.032} soft={0.55} />
-            {hair ? <Hair color={hair} /> : <Beanie color={hat} />}
+            {hatStyle === "brim" ? (
+              <>
+                {hair ? <Hair color={hair} /> : null}
+                <BrimHat color={hat} />
+              </>
+            ) : hatStyle === "none" ? (
+              hair ? <Hair color={hair} /> : null
+            ) : hair ? (
+              <Hair color={hair} />
+            ) : (
+              <Beanie color={hat} />
+            )}
 
             {/* eyes */}
             {[-1, 1].map((s) =>
@@ -206,7 +240,7 @@ export const Character: React.FC<CharacterProps> = ({
             )}
 
             {/* cold cheeks */}
-            {[-1, 1].map((s) => (
+            {(cheeks ? [-1, 1] : []).map((s) => (
               <Ball key={`ch${s}`} r={0.065} position={onFace(s * 0.3, -0.1, -0.03)} scale={[1, 0.7, 0.3]} color="#f19a9a" outline={0} unlit opacity={0.75} />
             ))}
           </group>
