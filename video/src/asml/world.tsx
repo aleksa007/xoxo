@@ -8,13 +8,14 @@ export type V3 = [number, number, number];
 /* -------------------------------------------------------- layout */
 export const WAFER_C: V3 = [0, 0.82, 0];
 export const WAFER_TOP = 0.836;
-export const F: V3 = [-5, 2.6, 0]; // plasma focus
-export const M1: V3 = [-4.6, 6.0, 0];
-export const MASK: V3 = [-1.0, 6.8, 0];
-export const M2: V3 = [2.2, 4.6, 0];
-export const M3: V3 = [-0.4, 3.1, 0];
+export const F: V3 = [-5.2, 2.6, 0]; // plasma focus
+export const IF: V3 = [-3.9, 2.6, 0]; // where the collector focuses the light
+export const M1: V3 = [-2.7, 2.6, 0];
+export const MASK: V3 = [-1.0, 7.0, 0];
+export const M2: V3 = [2.4, 5.0, 0];
+export const M3: V3 = [-0.6, 3.4, 0];
 /** Where the glass lens sits on the first beam. */
-export const LENS: V3 = [F[0] + (M1[0] - F[0]) * 0.6, F[1] + (M1[1] - F[1]) * 0.6, 0];
+export const LENS: V3 = [-3.35, 2.6, 0];
 export const W: V3 = [0, WAFER_TOP + 0.01, 0];
 export const PATH: V3[] = [F, M1, MASK, M2, M3, W];
 

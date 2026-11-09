@@ -179,6 +179,7 @@ const celFragment = /* glsl */ `
 
   void main() {
     vec3 n = normalize(vNormalW);
+    if (!gl_FrontFacing) n = -n;
     float d = dot(n, normalize(uLightDir));
     float lit = smoothstep(-0.02, 0.06, d);
     vec3 base = applyPattern(uColor);
