@@ -39,6 +39,8 @@ export type CharacterProps = {
   /** Arm rotations [x, z] at the shoulder; overrides the default pose. */
   armL?: [number, number];
   armR?: [number, number];
+  /** Clean-room face mask over mouth and nose. */
+  mask?: boolean;
 };
 
 const HEAD_Y = 1.52;
@@ -115,6 +117,7 @@ export const Character: React.FC<CharacterProps> = ({
   cheeks = true,
   armL,
   armR,
+  mask = false,
 }) => {
   const frame = useCurrentFrame() + seed * 17;
   const bob = Math.sin(frame / 9) * 0.015;
@@ -239,6 +242,7 @@ export const Character: React.FC<CharacterProps> = ({
               <Block size={[0.12, 0.028, 0.02]} position={onFace(0, -0.17, 0)} rotation={[-0.3, 0, 0]} color="#16161f" outline={0} unlit />
             )}
 
+            {mask ? <Ball r={0.3} position={onFace(0, -0.16, -0.12)} scale={[1, 0.62, 0.55]} color="#e9eef5" outline={0.02} soft={0.6} /> : null}
             {/* cold cheeks */}
             {(cheeks ? [-1, 1] : []).map((s) => (
               <Ball key={`ch${s}`} r={0.065} position={onFace(s * 0.3, -0.1, -0.03)} scale={[1, 0.7, 0.3]} color="#f19a9a" outline={0} unlit opacity={0.75} />
