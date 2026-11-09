@@ -104,3 +104,26 @@ blue dots on cut faces below a given water level.
    adjust the shot start times in `Amsterdam.tsx` and the per-shot cue times.
 
 Music and SFX are synthesized: `node scripts/make-amsterdam-audio.mjs`.
+
+---
+
+# "The machine only the Dutch can build" (ASML, 108 s)
+
+Composition id **`Asml`**, voice-over in `public/asml/voice.mp3` (ElevenLabs
+take with the pauses between sentences tightened to keep the pace up).
+
+Built on the lessons from the Amsterdam video:
+
+- **One continuous set.** A single clean room, one `ThreeCanvas` for the whole
+  video, and a key-framed camera (`KEYS` in `src/asml/Asml.tsx`) that glides and
+  telephoto-zooms instead of cutting between unrelated scenes.
+- **One hero object.** The phone's chip lands on the wafer and the machine is
+  assembled around it, piece by piece.
+- **Every "but" is visible.** Pen too thick (ink blob), projector lines blur,
+  air swallows the beam, glass lens cracks, etc.
+- **Lighting arc.** The room dims while the machine's insides are built so the
+  EUV light glows, and comes back up at "put it all together".
+
+Files: `src/asml/world.tsx` (models), `src/asml/Asml.tsx` (timeline, camera,
+overlays, sound cues), `src/asml/timing.ts` (generated captions, via
+`scripts/make-captions.py … scripts/asml-captions.json`), `scripts/make-asml-audio.mjs`.
